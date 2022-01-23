@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Button, Image, Input } from "react-native-elements";
 import { auth } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -18,7 +18,11 @@ const LoginScreen = ({ navigation }) => {
 
     return unsubscribe;
   }, []);
-  const signIn = () => {};
+  const signIn = () => {
+    signInWithEmailAndPassword(auth, email, password).catch((error) =>
+      alert(error)
+    );
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -44,6 +48,7 @@ const LoginScreen = ({ navigation }) => {
           type="password"
           value={password}
           onChangeText={(text) => setPassword(text)}
+          onSubmitEditing={signIn}
         />
       </View>
       <Button title="Login" containerStyle={styles.button} onPress={signIn} />
